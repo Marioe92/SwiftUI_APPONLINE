@@ -1,40 +1,42 @@
 import SwiftUI
 
+
+
 struct ProductListView: View {
     @EnvironmentObject var productVM: ProductViewModel
+    @Binding var isDarkMode: Bool
 
     var body: some View {
         NavigationView {
             List(productVM.products) { product in
                 NavigationLink(destination: ProductDetailView(product: product)) {
-                    HStack {
+                    HStack(spacing: 15) {
                         AsyncImage(url: URL(string: product.image)) { image in
                             image
                                 .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 80, height: 80)
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(8)
                         } placeholder: {
                             ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .frame(width: 80, height: 80)
                         }
-                        
-                       
-                        VStack(alignment: .leading) {
-                            Text(product.title)
-                                .font(.headline)
-                                .lineLimit(1)
-                            Text("€\(product.price, specifier: "%.2f")")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
+
+                        Text(product.title)
+                            .font(.body)
                     }
+                    .padding(.vertical, 5)
                 }
             }
             .navigationTitle("Productos")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    btnModo(isDarkMode: $isDarkMode)
+                }
+            }
         }
         .onAppear {
             productVM.fetchProducts()
         }
     }
 }
+

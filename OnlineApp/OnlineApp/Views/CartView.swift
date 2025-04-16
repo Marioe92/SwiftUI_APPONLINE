@@ -2,8 +2,8 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var productVM: ProductViewModel
-    //@EnvironmentObject var product: Product
-    
+    @Binding var isDarkMode: Bool
+
     var body: some View {
         NavigationView {
             VStack {
@@ -17,23 +17,12 @@ struct CartView: View {
                     List {
                         ForEach(productVM.cart) { product in
                             HStack {
-                                AsyncImage(url: URL(string: product.image)) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 80)
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                
-                                Spacer()
-
                                 Text(product.title)
                                 Spacer()
                                 Text("€\(product.price, specifier: "%.2f")")
                             }
                         }
-                        .onDelete(perform: borrarProducto)
+                        .onDelete(perform: removeItem)
                     }
 
                     HStack {
@@ -47,17 +36,20 @@ struct CartView: View {
                     }
                     .padding()
                 }
-                
             }
             .navigationTitle("Cesta")
             .toolbar {
-                EditButton() //btn para borrar el producto
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    btnModo(isDarkMode: $isDarkMode)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
             }
         }
     }
 
-
-    private func borrarProducto(at offsets: IndexSet) { // funcion sacada de chatGPT
+    private func removeItem(at offsets: IndexSet) {
         for index in offsets {
             let product = productVM.cart[index]
             if let indexToRemove = productVM.cart.firstIndex(where: { $0.id == product.id }) {
@@ -66,5 +58,3 @@ struct CartView: View {
         }
     }
 }
-
-

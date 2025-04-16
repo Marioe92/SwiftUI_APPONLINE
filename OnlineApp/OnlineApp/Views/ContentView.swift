@@ -1,23 +1,32 @@
+//
+//  ContentView.swift
+//  OnlineApp
+//
+//  Created by  on 15/4/25.
+//
+
+
 import SwiftUI
 
 struct ContentView: View {
     @StateObject var productVM = ProductViewModel()
+    @State private var isDarkMode = false
 
     var body: some View {
         TabView {
-            ProductListView()
+            ProductListView(isDarkMode: $isDarkMode)
                 .tabItem {
                     Image(systemName: "house")
                     Text("Inicio")
                 }
 
-            UserView()
+            UserView(isDarkMode: $isDarkMode)
                 .tabItem {
                     Image(systemName: "person")
                     Text("Cuenta")
                 }
 
-            CartView()
+            CartView(isDarkMode: $isDarkMode)
                 .tabItem {
                     Image(systemName: "cart")
                     Text("Cesta")
@@ -25,5 +34,7 @@ struct ContentView: View {
                 .badge(productVM.contarCesta)
         }
         .environmentObject(productVM)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }
+

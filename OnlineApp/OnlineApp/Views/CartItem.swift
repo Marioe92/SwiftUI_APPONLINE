@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 struct CartItem: Identifiable {
     let id: Int
     let product: Product
@@ -16,5 +15,4 @@ struct CartItem: Identifiable {
         
         return Double(quantity) * product.price
     }
-    
 }

@@ -15,9 +15,16 @@
 import SwiftUI
 
 struct UserView: View {
-    
-    @State private var user = Usuario(id: 1, name: "Mario", apellido: "Argote", email: "mario.argote@ikasle.egibide.org")
-    
+    @Binding var isDarkMode: Bool
+
+    @State private var user = Usuario(
+        
+        id: 1,
+        name: "Mario",
+        apellido: "Argote",
+        email: "mario.argote@ikasle.egibide.org"
+    )
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
@@ -32,13 +39,21 @@ struct UserView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Mi Cuenta")
+            .navigationTitle("Cuenta")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    btnModo(isDarkMode: $isDarkMode)//modo oscuro/////
+                }
+            }
         }
     }
 }
 
 struct UserView_Previews: PreviewProvider {
+    @State static var isDarkMode = false//modo oscuro pero predet. arranca en claro
+
     static var previews: some View {
-        UserView()
+        UserView(isDarkMode: $isDarkMode)
     }
 }
+
